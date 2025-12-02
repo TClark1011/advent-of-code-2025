@@ -34,11 +34,35 @@ const first = (input: string) => {
 
 const expectedFirstSolution = 1227775554;
 
+
 const second = (input: string) => {
-  console.log(input);
-  return 'solution 2';
+  const ids: number[] = [];
+
+  input
+    .split(',')
+    .map((rawIdRange) => rawIdRange.split('-').map(Number))
+    .forEach((range) => {
+      const min = range[0];
+      const max = range[1];
+
+      for (let i = min; i <= max; i++) {
+        ids.push(i);
+      }
+    });
+
+  const invalidIds = ids.filter((id) => {
+    const stringId = String(id);
+    return /^(\d+)(?:\1)+$/.test(stringId);
+  });
+
+  let invalidIdsSum = 0;
+  invalidIds.forEach((id) => {
+    invalidIdsSum += id;
+  });
+
+  return invalidIdsSum;
 };
 
-const expectedSecondSolution = 'solution 2';
+const expectedSecondSolution = 4174379265;
 
 export { expectedFirstSolution, expectedSecondSolution, first, second };
