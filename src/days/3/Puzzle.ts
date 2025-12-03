@@ -1,54 +1,45 @@
+const deriveCombinedJoltage = (first: number, second: number) =>
+  first * 10 + second;
+
 const first = (input: string) => {
-  const banks: number[][] = input.split('\n')
-    .map(line => 
-      line.split('')
-        .map(Number)
-    )
+  const banks: number[][] = input
+    .split('\n')
+    .map((line) => line.split('').map(Number));
 
-  const highestBankJoltages: number[] =
-    banks.map(joltages => {
-      // let bestDigitOne = joltages[0];
-      // let bestDigitTwo = joltages[1];
-      let bestFirstDigitIndex = 0;
-      let bestSecondDigitIndex = 1;
-      
-      for (let i = bestSecondDigitIndex + 1; i < joltages.length - 1; i++) {
-        const currentFirstDigitIndex = i;
-        const currentSecondDigitIndex = i + 1;
+  const highestBankJoltages: number[] = banks.map((joltages) => {
+    const lastJoltage = joltages.pop()!;
 
-        const bestFirstDigit = joltages[bestFirstDigitIndex]
-        const bestSecondDigit = joltages[bestSecondDigitIndex]
-
-        const currentFirstDigit = joltages[currentFirstDigitIndex];
-        const currentSecondDigit = joltages[currentSecondDigitIndex]
-
-        // We have found a higher value for the first index...
-        if (currentFirstDigit > bestFirstDigit) {
-          if (bestSecondDigitIndex <= currentFirstDigitIndex) {
-            // Second digit must come after first, so if the 
-            // new first index would break that, we select the
-            // current second index
-            bestSecondDigitIndex = currentSecondDigitIndex
-          }
-          bestFirstDigitIndex = currentFirstDigitIndex
-        }
-
-        // We have found a higher value for the first index
-        if (currentSecondDigit > bestSecondDigit) {
-          bestSecondDigitIndex = currentSecondDigitIndex
-        }
+    let bestFirstDigitIndex = -1;
+    let bestSecondDigitIndex = -1;
+    for (let i = 9; i >= 0; i--) {
+      if (bestFirstDigitIndex === -1) {
+        const indexOfFirstDigit = joltages.indexOf(i);
+        if (indexOfFirstDigit === -1) continue; // skip iteration if digit is not in the bank
+        bestFirstDigitIndex = indexOfFirstDigit;
       }
 
-      const bestFirstDigit = joltages[bestFirstDigitIndex];
-      const bestSecondDigit = joltages[bestSecondDigitIndex];
+      if (bestFirstDigitIndex > -1) {
+        const indexOfSecondDigit = joltages.indexOf(i, bestFirstDigitIndex + 1);
+        if (indexOfSecondDigit === -1) continue;
+        bestSecondDigitIndex = indexOfSecondDigit;
+      }
 
-      return bestFirstDigit * 10 + bestSecondDigit
-    })
+      if (bestFirstDigitIndex > -1 && bestSecondDigitIndex > -1) break;
+    }
+
+    const bestFirstDigit = joltages[bestFirstDigitIndex];
+    let bestSecondDigit = Math.max(lastJoltage, joltages[bestSecondDigitIndex]);
+    if (Number.isNaN(bestSecondDigit)) {
+      bestSecondDigit = lastJoltage;
+    }
+
+    return deriveCombinedJoltage(bestFirstDigit, bestSecondDigit);
+  });
 
   let result = 0;
-  highestBankJoltages.forEach(joltage => {
+  highestBankJoltages.forEach((joltage) => {
     result += joltage;
-  })
+  });
 
   return result;
 };
@@ -56,7 +47,7 @@ const first = (input: string) => {
 const expectedFirstSolution = 357;
 
 const second = (input: string) => {
-  input
+  input;
   return 'solution 2';
 };
 

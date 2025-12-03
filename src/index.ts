@@ -23,5 +23,10 @@ const { first, second }: Puzzle = await import(
   `./days/${puzzleName}/Puzzle.ts`
 );
 
+console.time('time');
 console.log("SOLUTION #1: ", first(input));
+console.timeEnd('time');
+
+console.time('time');
 console.log("SOLUTION #2: ", second(input));
+console.timeEnd('time');

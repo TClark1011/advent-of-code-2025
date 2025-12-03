@@ -13,7 +13,8 @@
       "recommended": true,
       "style": {
         "useTemplate": "error",
-        "noUselessElse": "error"
+        "noUselessElse": "error",
+        "noNonNullAssertion": "off"
       },
       "complexity": {
         "noUselessConstructor": "error"
