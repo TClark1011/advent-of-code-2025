@@ -1,12 +1,12 @@
 const first = (input: string) => {
-  console.log(input);
+  input
   return 'solution 1';
 };
 
 const expectedFirstSolution = 'solution 1';
 
 const second = (input: string) => {
-  console.log(input);
+  input
   return 'solution 2';
 };
 
