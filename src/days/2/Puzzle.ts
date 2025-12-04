@@ -34,6 +34,13 @@ const first = (input: string) => {
 
 const expectedFirstSolution = 1227775554;
 
+/**
+ * OPTIMISATION IDEAS:
+ * - Break each row up into the different possible combinations
+ * of sizes (eg; a row of 10 can be 2 groups of 5 or 5 groups of 2)
+ * and then check all the different combinations for one where all
+ * the groups are equal
+ */
 
 const second = (input: string) => {
   const ids: number[] = [];
