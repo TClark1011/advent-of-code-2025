@@ -64,27 +64,25 @@ const solveBankProblem = (input: string, joltagesPerBank: number) => {
       for (let targetDigit = 9; targetDigit > 0; targetDigit--) {
         const indexWithinSelectable = indexOf(selectableJoltages, targetDigit);
 
+        if (indexWithinSelectable === undefined) continue;
+
         const indexOfTargetDigit =
-          indexWithinSelectable === undefined
-            ? undefined
-            : indexWithinSelectable + minimumSelectableIndex;
+          indexWithinSelectable + minimumSelectableIndex;
 
         // If the number of remaining joltages is equal to the
         // number of joltages we have left to select, we can
         // select all the remaining joltages and stop searching
         if (indexOfTargetDigit === maximumSelectableIndex) {
-          // bestDigitIndexes.push(...joltages.slice(indexOfTargetDigit));
           for (let i = indexOfTargetDigit; i <= lastJoltageIndex; i++) {
             bestDigitIndexes.push(i);
           }
           break rootLoop;
         }
-        if (indexOfTargetDigit !== undefined) {
-          // If we have found a new digit, add it to the array
-          // and begin the search for the next index
-          bestDigitIndexes.push(indexOfTargetDigit);
-          continue rootLoop;
-        }
+
+        // If we have found a new digit, add it to the array
+        // and begin the search for the next index
+        bestDigitIndexes.push(indexOfTargetDigit);
+        continue rootLoop;
       }
     }
 
