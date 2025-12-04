@@ -1,56 +1,116 @@
-const deriveCombinedJoltage = (first: number, second: number) =>
-  first * 10 + second;
+const getLastElement = <T>(arr: T[]): T | undefined => {
+  if (arr.length === 0) return undefined;
 
-const first = (input: string) => {
-  const banks: number[][] = input
-    .split('\n')
-    .map((line) => line.split('').map(Number));
+  return arr[arr.length - 1];
+};
 
-  const highestBankJoltages: number[] = banks.map((joltages) => {
-    const lastJoltage = joltages.pop()!;
+/**
+ * Like `Array.indexOf`, but returns undefined if item
+ * is not found
+ */
+const indexOf = <T>(arr: T[], searchFor: T): number | undefined => {
+  const rawIndexOf = arr.indexOf(searchFor);
+  if (rawIndexOf === -1) return undefined;
 
-    let bestFirstDigitIndex = -1;
-    let bestSecondDigitIndex = -1;
-    for (let i = 9; i >= 0; i--) {
-      if (bestFirstDigitIndex === -1) {
-        const indexOfFirstDigit = joltages.indexOf(i);
-        if (indexOfFirstDigit === -1) continue; // skip iteration if digit is not in the bank
-        bestFirstDigitIndex = indexOfFirstDigit;
-      }
+  return rawIndexOf;
+};
 
-      if (bestFirstDigitIndex > -1) {
-        const indexOfSecondDigit = joltages.indexOf(i, bestFirstDigitIndex + 1);
-        if (indexOfSecondDigit === -1) continue;
-        bestSecondDigitIndex = indexOfSecondDigit;
-      }
-
-      if (bestFirstDigitIndex > -1 && bestSecondDigitIndex > -1) break;
-    }
-
-    const bestFirstDigit = joltages[bestFirstDigitIndex];
-    let bestSecondDigit = Math.max(lastJoltage, joltages[bestSecondDigitIndex]);
-    if (Number.isNaN(bestSecondDigit)) {
-      bestSecondDigit = lastJoltage;
-    }
-
-    return deriveCombinedJoltage(bestFirstDigit, bestSecondDigit);
-  });
-
+const assembleTotalJoltage = (joltageDigits: number[]): number => {
   let result = 0;
-  highestBankJoltages.forEach((joltage) => {
-    result += joltage;
+  joltageDigits.forEach((joltageDigit, i) => {
+    const multiplier = 10 ** (joltageDigits.length - i - 1);
+    result += joltageDigit * multiplier;
   });
 
   return result;
 };
 
+/**
+ * TODO OPTIMISATION: After selecting an index that is the last
+ * selectable one, we know that all following indexes will be
+ * selected
+ */
+const solveBankProblem = (input: string, joltagesPerBank: number) => {
+  const banks: number[][] = input
+    .split('\n')
+    .map((line) => line.split('').map(Number));
+
+  const highestBankJoltages: number[] = banks.map((joltages) => {
+    const bestDigitIndexes: number[] = [];
+    const lastJoltageIndex = joltages.length - 1;
+
+    rootLoop: for (
+      let joltageNumber = joltagesPerBank;
+      joltageNumber > 0 && bestDigitIndexes.length < joltagesPerBank;
+      joltageNumber--
+    ) {
+      // Must leave room for all future indexes to be selected
+      const maximumSelectableIndex = joltages.length - joltageNumber;
+
+      const lastSelectedIndex = getLastElement(bestDigitIndexes);
+
+      // Can only select indexes that come after any previously selected
+      // indexes
+      const minimumSelectableIndex =
+        lastSelectedIndex === undefined ? 0 : lastSelectedIndex + 1;
+
+      const selectableJoltages = joltages.slice(
+        minimumSelectableIndex,
+        maximumSelectableIndex + 1 //slice's maximum is non-inclusive
+      );
+
+      // We search for our next digit, starting at the highest
+      // value and progressing down
+      for (let targetDigit = 9; targetDigit > 0; targetDigit--) {
+        const indexWithinSelectable = indexOf(selectableJoltages, targetDigit);
+
+        const indexOfTargetDigit =
+          indexWithinSelectable === undefined
+            ? undefined
+            : indexWithinSelectable + minimumSelectableIndex;
+
+        // If the number of remaining joltages is equal to the
+        // number of joltages we have left to select, we can
+        // select all the remaining joltages and stop searching
+        if (indexOfTargetDigit === maximumSelectableIndex) {
+          // bestDigitIndexes.push(...joltages.slice(indexOfTargetDigit));
+          for (let i = indexOfTargetDigit; i <= lastJoltageIndex; i++) {
+            bestDigitIndexes.push(i);
+          }
+          break rootLoop;
+        }
+        if (indexOfTargetDigit !== undefined) {
+          // If we have found a new digit, add it to the array
+          // and begin the search for the next index
+          bestDigitIndexes.push(indexOfTargetDigit);
+          continue rootLoop;
+        }
+      }
+    }
+
+    return assembleTotalJoltage(
+      bestDigitIndexes.map((digitIndex) => joltages[digitIndex])
+    );
+  });
+
+  let result = 0;
+  for (const joltage of highestBankJoltages) {
+    result += joltage;
+  }
+
+  return result;
+};
+
+const first = (input: string) => {
+  return solveBankProblem(input, 2);
+};
+
 const expectedFirstSolution = 357;
 
 const second = (input: string) => {
-  input;
-  return 'solution 2';
+  return solveBankProblem(input, 12);
 };
 
-const expectedSecondSolution = 'solution 2';
+const expectedSecondSolution = 3121910778619;
 
 export { expectedFirstSolution, expectedSecondSolution, first, second };
