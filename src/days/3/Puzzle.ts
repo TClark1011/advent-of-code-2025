@@ -37,7 +37,6 @@ const solveBankProblem = (input: string, joltagesPerBank: number) => {
 
   const highestBankJoltages: number[] = banks.map((joltages) => {
     const bestDigitIndexes: number[] = [];
-    const lastJoltageIndex = joltages.length - 1;
 
     rootLoop: for (
       let joltageNumber = joltagesPerBank;
@@ -56,7 +55,8 @@ const solveBankProblem = (input: string, joltagesPerBank: number) => {
 
       const selectableJoltages = joltages.slice(
         minimumSelectableIndex,
-        maximumSelectableIndex + 1 //slice's maximum is non-inclusive
+        maximumSelectableIndex + 1
+        //slice's maximum is non-inclusive so we +1
       );
 
       // We search for our next digit, starting at the highest
@@ -73,7 +73,7 @@ const solveBankProblem = (input: string, joltagesPerBank: number) => {
         // number of joltages we have left to select, we can
         // select all the remaining joltages and stop searching
         if (indexOfTargetDigit === maximumSelectableIndex) {
-          for (let i = indexOfTargetDigit; i <= lastJoltageIndex; i++) {
+          for (let i = indexOfTargetDigit; i < joltages.length; i++) {
             bestDigitIndexes.push(i);
           }
           break rootLoop;
