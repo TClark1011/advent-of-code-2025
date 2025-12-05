@@ -20,8 +20,6 @@ const first = (input: string) => {
   }
 
   return freshAvailableIdCount;
-
-  // return 0;
 };
 
 const expectedFirstSolution = 3;
