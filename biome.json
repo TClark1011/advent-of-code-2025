@@ -14,7 +14,8 @@
       "style": {
         "useTemplate": "error",
         "noUselessElse": "error",
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useConst": "off"
       },
       "complexity": {
         "noUselessConstructor": "error"
