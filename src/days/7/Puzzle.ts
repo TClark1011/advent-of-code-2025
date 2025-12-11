@@ -60,11 +60,74 @@ const first = (input: string) => {
 
 const expectedFirstSolution = 21;
 
-const second = (input: string) => {
-  input;
-  return 'solution 2';
+const toHex = (num: number): string => num.toString(16);
+const parseHex = (hex: string): number => parseInt(hex, 16);
+
+const parseTileValue = (tile: string): number => {
+  if (tile === SPLITTER || tile === EMPTY) return 0;
+  return parseHex(tile);
 };
 
-const expectedSecondSolution = 'solution 2';
+/**
+ * Wasn't able to solve this myself, had to look up an explainer
+ * for the algorithm, but the code is all mine.
+ */
+const second = (input: string) => {
+  const grid = input.split('\n').map((row) => row.split(''));
+  const splitterCoordinates: Coordinates[] = [];
+
+  for (let y = 0; y < grid.length; y++) {
+    for (let x = 0; x < grid[0].length; x++) {
+      if (grid[y][x] === SPLITTER) {
+        splitterCoordinates.push([x, y]);
+      }
+    }
+  }
+
+  const startingX = grid[0].indexOf('S');
+  const activeXs = new Set([startingX]);
+
+  grid[0][startingX] = '1';
+
+  const getCellValue = (x: number, y: number) => {
+    let sum = 0;
+    [x - 1, x + 1].forEach((newX) => {
+      const tile = grid[y][newX];
+      if (tile === SPLITTER) {
+        sum += parseTileValue(grid[y - 1][newX]);
+      }
+    });
+
+    sum += parseTileValue(grid[y - 1][x]);
+
+    return toHex(sum);
+  };
+
+  for (let y = 1; y < grid.length; y++) {
+    activeXs.forEach((x) => {
+      const tile = grid[y][x];
+      if (tile === SPLITTER) {
+        activeXs.delete(x);
+        activeXs.add(x - 1);
+        activeXs.add(x + 1);
+      } else {
+        grid[y][x] = getCellValue(x, y);
+      }
+    });
+  }
+
+  const finalRow = grid[grid.length - 1];
+
+  let sum = 0;
+  for (const cell of finalRow) {
+    try {
+      sum += parseTileValue(cell);
+    } catch {}
+  }
+
+  return sum;
+};
+
+const expectedSecondSolution = 40;
 
 export { expectedFirstSolution, expectedSecondSolution, first, second };
