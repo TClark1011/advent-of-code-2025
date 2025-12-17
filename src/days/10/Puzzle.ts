@@ -56,8 +56,6 @@ const first = (input: string) => {
     });
 
     // Convert the on/off lights to binary numbers
-    // When we iterate, we flip the order because
-    // binary digits are indexed from the right
     const lightsOnesAt: number[] = [];
     rawLights.forEach((light, index) => {
       if (light === LIGHT_OFF) return;
