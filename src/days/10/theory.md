@@ -1,0 +1,2 @@
+- Treat the on/off lights as binary digits, so the end result is just a number
+- You can use XOR for the digit toggling, each digit that gets toggled is 1, rest are 0

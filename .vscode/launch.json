@@ -1,0 +1,48 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug index.test.ts",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "/Users/thomasclark/.nvm/versions/node/v24.11.1/bin/node",
+      "runtimeArgs": ["--test"],
+      "program": "${workspaceFolder}/src/index.test.ts",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      "name": "Debug index.ts",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "/Users/thomasclark/.nvm/versions/node/v24.11.1/bin/node",
+      "runtimeArgs": [],
+      "program": "${workspaceFolder}/src/index.ts",
+      "args": ["${input:dayNumber}"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "dayNumber",
+      "type": "promptString",
+      "description": "Enter the day number (e.g., 10)",
+      "default": "10"
+    }
+  ]
+}

@@ -164,11 +164,11 @@ const second = (input: string) => {
   const grid: string[][] = [];
 
   const logGrid = (prefix?: string) => {
-    console.log('-----------');
-    if (prefix) {
-      console.log(prefix);
-    }
-    console.log(grid.map((r) => r.join('')).join('\n'));
+    // console.log('-----------');
+    // if (prefix) {
+    //   console.log(prefix);
+    // }
+    // console.log(grid.map((r) => r.join('')).join('\n'));
   };
 
   // Base empty layer
@@ -219,16 +219,16 @@ const second = (input: string) => {
   const lineIntersectsWithShape = (line: Line) =>
     lines.some((shapeLine) => doLinesIntersect(shapeLine, line));
 
-  console.log('intersection testing:', {
-    '[0,0] -> [0,1] (false)': lineIntersectsWithShape([
-      [0, 0],
-      [0, 1],
-    ]),
-    '[1,4] -> [3,4] (true)': lineIntersectsWithShape([
-      [1, 4],
-      [3, 4],
-    ]),
-  });
+  // console.log('intersection testing:', {
+  //   '[0,0] -> [0,1] (false)': lineIntersectsWithShape([
+  //     [0, 0],
+  //     [0, 1],
+  //   ]),
+  //   '[1,4] -> [3,4] (true)': lineIntersectsWithShape([
+  //     [1, 4],
+  //     [3, 4],
+  //   ]),
+  // });
 
   const isInsideShape = ([x, y]: Coordinates): boolean => {
     let xRayIntersections = 0;
@@ -239,7 +239,7 @@ const second = (input: string) => {
         simpleIsOnLine(line, [rayX, y])
       );
 
-      console.log('(Puzzle): ', { rayX });
+      // console.log('(Puzzle): ', { rayX });
 
       // console.log('(Puzzle): ', { startingPointLiesOnLine, coords: [rayX, y] });
 
@@ -279,10 +279,10 @@ const second = (input: string) => {
     // return yRayIntersections % 2 !== 0 && xRayIntersections % 2 !== 0;
   };
 
-  console.log('inside shape testing', {
-    '[3,4] (true)': isInsideShape([3, 4]),
-    '[0,0] (false)': isInsideShape([0, 0]),
-  });
+  // console.log('inside shape testing', {
+  //   '[3,4] (true)': isInsideShape([3, 4]),
+  //   '[0,0] (false)': isInsideShape([0, 0]),
+  // });
 
   // // Horizontal Fill
   // for (let y = 0; y < grid.length; y++) {
